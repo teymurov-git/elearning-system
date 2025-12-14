@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Riyaziyyat Kursu - Vasif Teymurov</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            color: #1a1a1a;
+            overflow-x: hidden;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 20px 0;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8em;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #667eea;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .hero {
+            margin-top: 80px;
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            top: -250px;
+            right: -250px;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            bottom: -200px;
+            left: -200px;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 80px 30px;
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .hero-text {
+            color: white;
+        }
+
+        .hero-text h1 {
+            font-size: 4em;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 25px;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .hero-text .highlight {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px 15px;
+            border-radius: 8px;
+            display: inline-block;
+            margin-bottom: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+
+        .hero-text p {
+            font-size: 1.3em;
+            margin-bottom: 35px;
+            opacity: 0.95;
+            line-height: 1.6;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: 700;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .hero-visual {
+            position: relative;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .hero-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .hero-card h3 {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+
+        .hero-card ul {
+            list-style: none;
+        }
+
+        .hero-card li {
+            padding: 10px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .hero-card li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+            color: #4ade80;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .section {
+            padding: 100px 30px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 70px;
+        }
+
+        .section-header h2 {
+            font-size: 3em;
+            font-weight: 800;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-header p {
+            font-size: 1.2em;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-bottom: 80px;
+        }
+
+        .module-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .module-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .module-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+            border-color: #667eea;
+        }
+
+        .module-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .module-number {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .module-card h3 {
+            font-size: 1.6em;
+            margin-bottom: 15px;
+            color: #1a1a1a;
+        }
+
+        .module-card p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .module-topics {
+            list-style: none;
+            margin-top: 20px;
+        }
+
+        .module-topics li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+            color: #555;
+            font-size: 0.95em;
+        }
+
+        .module-topics li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .features-section {
+            background: #f8f9fa;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-box {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .feature-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5em;
+            margin: 0 auto 20px;
+        }
+
+        .feature-box h4 {
+            font-size: 1.3em;
+            margin-bottom: 10px;
+            color: #1a1a1a;
+        }
+
+        .feature-box p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .testimonials {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .testimonial-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 35px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .testimonial-text {
+            font-size: 1.1em;
+            line-height: 1.7;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+        }
+
+        .author-info h5 {
+            font-size: 1.1em;
+            margin-bottom: 5px;
+        }
+
+        .author-info p {
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+
+        .cta-section {
+            text-align: center;
+            padding: 100px 30px;
+            background: #1a1a1a;
+            color: white;
+        }
+
+        .cta-section h2 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            font-weight: 800;
+        }
+
+        .cta-section p {
+            font-size: 1.3em;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+
+        .btn-large {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 50px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1.2em;
+            font-weight: 600;
+            display: inline-block;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-large:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.6);
+        }
+
+        footer {
+            background: #0f0f0f;
+            color: #999;
+            padding: 50px 30px;
+            text-align: center;
+        }
+
+        footer p {
+            font-size: 1em;
+        }
+
+        .instructor-section {
+            background: white;
+            padding: 80px 30px;
+        }
+
+        .instructor-card {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .instructor-avatar {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            margin: 0 auto 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+            color: white;
+            font-weight: 700;
+        }
+
+        .instructor-card h3 {
+            font-size: 2em;
+            margin-bottom: 15px;
+            color: #1a1a1a;
+        }
+
+        .instructor-card .title {
+            color: #667eea;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .instructor-card p {
+            color: #666;
+            line-height: 1.8;
+            font-size: 1.1em;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-text h1 {
+                font-size: 2.5em;
+            }
+
+            .hero-stats {
+                justify-content: center;
+            }
+
+            .section-header h2 {
+                font-size: 2em;
+            }
+
+            .modules-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-section h2 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <div class="logo">Math Academy</div>
+            <ul class="nav-links">
+                <li><a href="#kurs">Kurs</a></li>
+                <li><a href="#xususiyyetler">Xüsusiyyətlər</a></li>
+                <li><a href="#muellim">Müəllim</a></li>
+                <li><a href="#elaqe">Əlaqə</a></li>
+            </ul>
+            <a href="#qosul" class="btn-primary">Qoşul</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <span class="highlight">✨ Premium Riyaziyyat Kursu</span>
+                <h1>Riyaziyyata ilk addımı at</h1>
+                <p>Vasif Teymurov ilə riyaziyyatı sıfırdan mükəmməl səviyyəyə qədər öyrən. Müasir metodlar, praktiki nümunələr və peşəkar dəstək.</p>
+                <a href="#qosul" class="btn-primary" style="font-size: 1.1em; padding: 15px 40px;">İndi Başla</a>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">500+</span>
+                        <span class="stat-label">Tələbə</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">100+</span>
+                        <span class="stat-label">Maksimal Nəticə</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">99%</span>
+                        <span class="stat-label">Uğur Dərəcəsi</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="hero-card">
+                    <h3>Kurs İçindəkilər</h3>
+                    <ul>
+                        <li>Keyfiyyətli izahlar</li>
+                        <li>Praktiki tapşırıqlar və testlər</li>
+                        <li>Müəllim dəstəyi 24/7</li>
+                        <li>Həyat boyu giriş</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="kurs">
+        <div class="container">
+            <div class="section-header">
+                <h2>Kurs Modulları</h2>
+                <p>Riyaziyyatın bütün sahələrini əhatə edən strukturlaşdırılmış tədris proqramı</p>
+            </div>
+            <div class="modules-grid">
+                <div class="module-card">
+                    <div class="module-number">01</div>
+                    <h3>Əsas Riyaziyyat</h3>
+                    <p>Riyaziyyatın əsasları və fundamental anlayışlar</p>
+                    <ul class="module-topics">
+                        <li>Ədədlər və əməliyyatlar</li>
+                        <li>Kəsrlər və onluq ədədlər</li>
+                        <li>Faiz hesablamaları</li>
+                        <li>Nisbət və proporsiya</li>
+                    </ul>
+                </div>
+                <div class="module-card">
+                    <div class="module-number">02</div>
+                    <h3>Cəbr</h3>
+                    <p>Tənliklər, bərabərsizliklər və cəbri ifadələr</p>
+                    <ul class="module-topics">
+                        <li>Dəyişənlər və ifadələr</li>
+                        <li>Xətti və kvadrat tənliklər</li>
+                        <li>Polinomlar və faktorizasiya</li>
+                        <li>Bərabərsizliklər</li>
+                    </ul>
+                </div>
+                <div class="module-card">
+                    <div class="module-number">03</div>
+                    <h3>Həndəsə</h3>
+                    <p>Fiqurlar, ölçülər və məkan anlayışları</p>
+                    <ul class="module-topics">
+                        <li>Fiqurlar və ölçülər</li>
+                        <li>Üçbucaqlar və dördbucaqlar</li>
+                        <li>Dairə və çevrə</li>
+                        <li>Həcm və səth sahəsi</li>
+                    </ul>
+                </div>
+                <div class="module-card">
+                    <div class="module-number">04</div>
+                    <h3>Triqonometriya</h3>
+                    <p>Bucaqlar, funksiyalar və triqonometrik tənliklər</p>
+                    <ul class="module-topics">
+                        <li>Bucaqlar və dərəcələr</li>
+                        <li>Sinus, kosinus, tangens</li>
+                        <li>Triqonometrik funksiyalar</li>
+                        <li>Triqonometrik eyniliklər</li>
+                    </ul>
+                </div>
+                <div class="module-card">
+                    <div class="module-number">05</div>
+                    <h3>Funksiyalar</h3>
+                    <p>Funksiya anlayışı, qrafiklər və xassələr</p>
+                    <ul class="module-topics">
+                        <li>Funksiya anlayışı</li>
+                        <li>Xətti və kvadrat funksiyalar</li>
+                        <li>Qrafiklərin qurulması</li>
+                        <li>Funksiyaların xassələri</li>
+                    </ul>
+                </div>
+                <div class="module-card">
+                    <div class="module-number">06</div>
+                    <h3>Kalkulus</h3>
+                    <p>Limit, törəmə və inteqral hesablama</p>
+                    <ul class="module-topics">
+                        <li>Limit anlayışı</li>
+                        <li>Törəmə və diferensial</li>
+                        <li>Törəmənin tətbiqi</li>
+                        <li>İnteqral hesablama</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section features-section" id="xususiyyetler">
+        <div class="container">
+            <div class="section-header">
+                <h2>Niyə Bizim Kursumuz?</h2>
+                <p>Müasir tədris metodları və peşəkar dəstəklə riyaziyyatı asan öyrənin</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-box">
+                    <div class="feature-icon">🎥</div>
+                    <h4>HD Video Dərslər</h4>
+                    <p>Yüksək keyfiyyətli video materiallar ilə hər mövzunu ətraflı öyrənin</p>
+                </div>
+                <div class="feature-box">
+                    <div class="feature-icon">📖</div>
+                    <h4>İnteraktiv Materiallar</h4>
+                    <p>Animasiyalar, qrafiklər və interaktiv vərəqlərlə öyrənməni asanlaşdırın</p>
+                </div>
+                <div class="feature-box">
+                    <div class="feature-icon">✍️</div>
+                    <h4>Praktiki Məşqlər</h4>
+                    <p>Həll edilmiş nümunələr və praktiki tapşırıqlarla bilikləri möhkəmləndirin</p>
+                </div>
+                <div class="feature-box">
+                    <div class="feature-icon">📊</div>
+                    <h4>Avtomatik Testlər</h4>
+                    <p>Bilik yoxlama testləri və imtahanlar ilə irəliləyişi izləyin</p>
+                </div>
+                <div class="feature-box">
+                    <div class="feature-icon">👨‍🏫</div>
+                    <h4>Peşəkar Dəstək</h4>
+                    <p>Təcrübəli müəllimlərdən 24/7 dəstək və suallarınıza cavablar</p>
+                </div>
+                <div class="feature-box">
+                    <div class="feature-icon">📱</div>
+                    <h4>Mobil Uyğunluq</h4>
+                    <p>İstənilən cihazda - telefon, planşet və ya kompüterdə öyrənin</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section instructor-section" id="muellim">
+        <div class="container">
+            <div class="section-header">
+                <h2>Müəllimimiz</h2>
+                <p>Təcrübəli və peşəkar riyaziyyat müəllimi</p>
+            </div>
+            <div class="instructor-card">
+                <div class="instructor-avatar">VT</div>
+                <h3>Vasif Teymurov</h3>
+                <div class="title">Riyaziyyat Müəllimi</div>
+                <p>15 ildən çox təcrübəyə malik peşəkar riyaziyyat müəllimi. Yüzlərlə tələbəni uğurla imtahanlara hazırlamış, müasir tədris metodlarından istifadə edərək riyaziyyatı asan və maraqlı şəkildə tədris edir.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section testimonials">
+        <div class="container">
+            <div class="section-header" style="color: white;">
+                <h2 style="background: linear-gradient(135deg, #fff 0%, #e0e0e0 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Tələbə Rəyləri</h2>
+                <p style="color: rgba(255, 255, 255, 0.9);">Kursumuzdan istifadə edən tələbələrin fikirləri</p>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-text">"Bu kurs sayəsində riyaziyyatı həqiqətən başa düşdüm. Vasif müəllim çox yaxşı izah edir və materiallar çox faydalıdır."</div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">A</div>
+                        <div class="author-info">
+                            <h5>Ayşə Məmmədova</h5>
+                            <p>11-ci sinif tələbəsi</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-text">"İmtahana hazırlaşarkən bu kurs mənim üçün çox faydalı oldu. Bütün mövzuları ətraflı və aydın şəkildə öyrəndim."</div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">E</div>
+                        <div class="author-info">
+                            <h5>Elvin Həsənov</h5>
+                            <p>Abituriyent</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-text">"Video dərslər çox keyfiyyətlidir və praktiki tapşırıqlar bilikləri möhkəmləndirməyə kömək edir. Çox məmnunam!"</div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">L</div>
+                        <div class="author-info">
+                            <h5>Leyla Qasımova</h5>
+                            <p>Universitet tələbəsi</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section" id="qosul">
+        <div class="container">
+            <h2>Kursa Qoşulun İndi</h2>
+            <p>Riyaziyyatı mükəmməl öyrənmək üçün ilk addımı atın</p>
+            <a href="#" class="btn-large">(+994) 51 513 17 18</a>
+        </div>
+    </section>
+
+    <footer id="elaqe">
+        <div class="container">
+            <p>&copy; 2024 Riyaziyyat Kursu - Vasif Teymurov. Bütün hüquqlar qorunur.</p>
+        </div>
+    </footer>
+</body>
+</html>
