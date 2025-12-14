@@ -51,3 +51,4 @@ class Command(BaseCommand):
                 f'- Ümumi istifadəçi sayı: {users.count()}'
             )
         )
+
