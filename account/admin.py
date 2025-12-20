@@ -3,7 +3,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.html import format_html
 from django.urls import reverse
 from datetime import datetime
-from .models import User, Group, MonthlyPayment
+from .models import User, Group, MonthlyPayment, Exam, StudentResult
 
 
 class MonthlyPaymentInline(admin.TabularInline):
@@ -24,21 +24,30 @@ class MonthlyPaymentInline(admin.TabularInline):
         return False
 
 
+class StudentResultInline(admin.TabularInline):
+    model = StudentResult
+    extra = 0
+    fields = ('exam', 'result')
+    verbose_name = 'Sınaq Nəticəsi'
+    verbose_name_plural = 'Sınaq Nəticələri'
+
+
 class UserAdminCustom(BaseUserAdmin):
-    list_display = ('first_name', 'last_name', 'phone', 'email', 'group', 'is_staff')
-    search_fields = ('first_name', 'last_name', 'email', 'phone')
+    list_display = ('first_name', 'last_name', 'work_number', 'phone', 'email', 'group', 'is_staff')
+    search_fields = ('first_name', 'last_name', 'email', 'phone', 'work_number')
     list_filter = ('group', 'is_staff', 'is_superuser', 'is_active')
-    inlines = [MonthlyPaymentInline]
+    inlines = [MonthlyPaymentInline, StudentResultInline]
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
         ('Personal info', {'fields': ('first_name', 'last_name', 'email', 'phone', 'group')}),
+        ('Məlumatlar', {'fields': ('work_number',)}),
         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
         ('Important dates', {'fields': ('last_login', 'date_joined')}),
     )
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('username', 'password1', 'password2', 'first_name', 'last_name', 'email', 'phone', 'group'),
+            'fields': ('username', 'password1', 'password2', 'first_name', 'last_name', 'email', 'phone', 'group', 'work_number'),
         }),
     )
     
@@ -111,6 +120,51 @@ class MonthlyPaymentAdmin(admin.ModelAdmin):
     month_name.short_description = 'Ay'
 
 
+class ExamAdmin(admin.ModelAdmin):
+    list_display = ('name', 'description_short', 'created_at', 'result_count')
+    search_fields = ('name', 'description')
+    list_filter = ('created_at',)
+    readonly_fields = ('created_at',)
+    
+    def description_short(self, obj):
+        if obj.description:
+            return obj.description[:50] + '...' if len(obj.description) > 50 else obj.description
+        return '-'
+    description_short.short_description = 'Təsvir'
+    
+    def result_count(self, obj):
+        count = obj.results.count()
+        if count > 0:
+            url = reverse('admin:account_studentresult_changelist') + f'?exam__id__exact={obj.id}'
+            return format_html('<a href="{}">{} nəticə</a>', url, count)
+        return '0 nəticə'
+    result_count.short_description = 'Nəticələr'
+
+
+class StudentResultAdmin(admin.ModelAdmin):
+    list_display = ('student', 'exam', 'result', 'created_at', 'updated_at')
+    list_filter = ('exam', 'created_at', 'updated_at', 'student__group')
+    search_fields = ('student__first_name', 'student__last_name', 'student__work_number', 'exam__name')
+    list_editable = ('result',)
+    readonly_fields = ('created_at', 'updated_at')
+    
+    fieldsets = (
+        (None, {
+            'fields': ('student', 'exam', 'result')
+        }),
+        ('Tarixlər', {
+            'fields': ('created_at', 'updated_at')
+        }),
+    )
+
+
 admin.site.register(User, UserAdminCustom)
 admin.site.register(Group, GroupAdmin)
 admin.site.register(MonthlyPayment, MonthlyPaymentAdmin)
+admin.site.register(Exam, ExamAdmin)
+admin.site.register(StudentResult, StudentResultAdmin)
+
+
+# admin.site.site_header = "E-Learning Admin Panel"
+# admin.site.site_title = "E-Learning Admin"
+# admin.site.index_title = "İdarəetmə Paneli"

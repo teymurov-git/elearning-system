@@ -11,9 +11,18 @@ class User(AbstractUser):
     phone = models.CharField(max_length=15, blank=True, null=True)
     email = models.EmailField("email address")
     group = models.ForeignKey('Group', on_delete=models.SET_NULL, null=True, blank=True, related_name='users', verbose_name='Group')
+    work_number = models.CharField(max_length=50, unique=True, blank=True, null=True, verbose_name='İş Nömrəsi')
+
+    class Meta:
+        verbose_name = 'Tələbə' 
+        verbose_name_plural = 'Tələbələr'
 
     def __str__(self):
-        return self.first_name + ' ' + self.last_name + ' ' + self.phone + ' ' + self.email
+        first_name = self.first_name or ''
+        last_name = self.last_name or ''
+        phone = self.phone or ''
+        email = self.email or ''
+        return f"{first_name} {last_name} {phone} {email}".strip()
 
 
 class Group(models.Model):
@@ -21,6 +30,37 @@ class Group(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Exam(models.Model):
+    name = models.CharField(max_length=200, verbose_name='Sınaq Adı')
+    description = models.TextField(blank=True, null=True, verbose_name='Təsvir')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Yaradılma Tarixi')
+    
+    class Meta:
+        verbose_name = 'Sınaq'
+        verbose_name_plural = 'Sınaqlar'
+        ordering = ['-created_at']
+    
+    def __str__(self):
+        return self.name
+
+
+class StudentResult(models.Model):
+    student = models.ForeignKey(User, on_delete=models.CASCADE, related_name='results', verbose_name='Tələbə')
+    exam = models.ForeignKey(Exam, on_delete=models.CASCADE, related_name='results', verbose_name='Sınaq')
+    result = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True, verbose_name='Nəticə (%)')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Yaradılma Tarixi')
+    updated_at = models.DateTimeField(auto_now=True, verbose_name='Yenilənmə Tarixi')
+    
+    class Meta:
+        unique_together = ('student', 'exam')
+        verbose_name = 'Tələbə Nəticəsi'
+        verbose_name_plural = 'Tələbə Nəticələri'
+        ordering = ['-created_at']
+    
+    def __str__(self):
+        return f"{self.student.first_name} {self.student.last_name} - {self.exam.name}: {self.result}%"
 
 
 class MonthlyPayment(models.Model):

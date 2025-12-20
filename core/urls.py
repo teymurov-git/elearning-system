@@ -1,6 +1,7 @@
 from django.urls import path
-from .views import home
+from .views import home, check_result
 
 urlpatterns = [
-    path('', home, name='home')
+    path('', home, name='home'),
+    path('netice/', check_result, name='check_result'),
 ]

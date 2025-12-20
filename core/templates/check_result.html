@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nəticə Yoxlama - Riyaziyyat Kursu</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 50px;
+            max-width: 600px;
+            width: 100%;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            text-align: center;
+            color: #1a1a1a;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+
+        .form-group {
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #333;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        input[type="text"]:focus,
+        select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        select {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+            outline: none;
+            background-color: white;
+            cursor: pointer;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .error-message {
+            background: #fee;
+            color: #c33;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #c33;
+            font-weight: 500;
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+            margin-top: 30px;
+            text-align: center;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .result-card h2 {
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .student-name {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .result-percentage {
+            font-size: 4em;
+            font-weight: 800;
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .result-label {
+            font-size: 1.2em;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+
+        .work-number-display {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            font-size: 1em;
+            opacity: 0.8;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 30px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: #764ba2;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .result-percentage {
+                font-size: 3em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Nəticə Yoxlama</h1>
+        <p class="subtitle">İş nömrənizi daxil edərək nəticənizi görə bilərsiniz</p>
+
+        {% if error %}
+            <div class="error-message">
+                {{ error }}
+            </div>
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="work_number">İş Nömrəsi</label>
+                <input 
+                    type="text" 
+                    id="work_number" 
+                    name="work_number" 
+                    placeholder="İş nömrənizi daxil edin"
+                    required
+                    autofocus
+                    value="{% if request.method == 'POST' %}{{ request.POST.work_number }}{% endif %}"
+                >
+            </div>
+            <div class="form-group">
+                <label for="exam_id">Sınaq Seçin</label>
+                <select id="exam_id" name="exam_id" required>
+                    <option value="">Sınaq seçin</option>
+                    {% for exam in exams %}
+                        <option value="{{ exam.id }}" {% if request.method == 'POST' and request.POST.exam_id == exam.id|stringformat:"s" %}selected{% endif %}>
+                            {{ exam.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn">Nəticəni Göstər</button>
+        </form>
+
+        {% if student_result %}
+            <div class="result-card">
+                <h2>Nəticəniz</h2>
+                <div class="student-name">
+                    {{ student.first_name }} {{ student.last_name }}
+                </div>
+                <div class="result-label" style="margin-top: 10px; font-size: 1em; opacity: 0.8;">
+                    {{ student_result.exam.name }}
+                </div>
+                {% if student_result.result is not None %}
+                    <div class="result-label">Nəticə</div>
+                    <div class="result-percentage">{{ student_result.result }}%</div>
+                {% else %}
+                    <div class="result-label" style="margin-top: 20px;">
+                        Nəticə hələ daxil edilməyib
+                    </div>
+                {% endif %}
+                <div class="work-number-display">
+                    İş Nömrəsi: {{ student.work_number }}
+                </div>
+            </div>
+        {% elif student and not error %}
+            <div class="result-card">
+                <h2>Nəticə Tapılmadı</h2>
+                <div class="student-name">
+                    {{ student.first_name }} {{ student.last_name }}
+                </div>
+                <div class="result-label" style="margin-top: 20px;">
+                    Seçilmiş sınaq üçün nəticə tapılmadı.
+                </div>
+                <div class="work-number-display">
+                    İş Nömrəsi: {{ student.work_number }}
+                </div>
+            </div>
+        {% endif %}
+
+        <a href="/" class="back-link">← Ana səhifəyə qayıt</a>
+    </div>
+</body>
+</html>
+
